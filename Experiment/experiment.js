@@ -103,7 +103,7 @@ function initialiseInfo()
 /*----------------------  Initialise scene to add background color to window and add Input Checkboxes  ------------------*/
 function initialiseScene()
 {
-    PIEscene.background = new THREE.Color( 0xffffff );
+    PIEscene.background = new THREE.Color( 0xc6e2ff );
     PIEaddInputCheckbox("Cube1", true, cube1);
     PIEaddInputCheckbox("Cube2", false, cube2);
     PIEaddInputCheckbox("Cube3", false, cube3);
@@ -121,6 +121,14 @@ function initialiseScene()
     PIEaddDisplayCommand("400g", fourhundredGram);
     PIEaddDisplayCommand("500g", fivehundredGram);
     PIEaddDisplayCommand("1000g", oneKiloGram);
+}
+
+window.onresize = function(){
+    console.log("Window size: "+window.innerWidth+"x"+window.innerHeight+"px");
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    var aspectRatio = window.innerWidth/window.innerHeight;
+    camera.aspect = aspectRatio;
+    camera.updateProjectionMatrix();
 }
 
 /*----------------------  Functions for different weights to keep track of number of blocks of different type  ------------------*/
@@ -374,7 +382,7 @@ function addWoodenBox()
 
     group.add(mainCuboid);
     group.add(mainLine2);
-    group.position.set(0, 3.6, 0);
+    group.position.set(0, 4, 0);
     PIEaddElement(group);
 
     primaryBlockType[0] = 1;
@@ -408,6 +416,71 @@ function sink()
 
 }
 
+function addTable(){
+    var tableGeom = new THREE.CubeGeometry( 40, 0.5, 40, 4, 4, 1 );
+    var tableTop =  new THREE.Mesh( tableGeom,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+    tableTop.position.z += 116;
+    tableTop.position.y -= 16;
+    PIEaddElement(tableTop);
+
+    var edges = new THREE.EdgesGeometry( tableGeom );
+    var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+    
+    tableTop.add(line);
+
+    var tablelegGeom = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
+    var tableleg =  new THREE.Mesh( tablelegGeom,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+    tableleg.position.set(-17.5,-20,17.5);
+    
+    var edges2 = new THREE.EdgesGeometry( tablelegGeom );
+    var line2 = new THREE.LineSegments( edges2, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+    
+    tableleg.add(line2);
+    tableTop.add(tableleg);  
+
+   
+    var tablelegGeom2 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
+    var tableleg2 =  new THREE.Mesh( tablelegGeom2,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+    tableleg2.position.set(17.5,-20,17.5);
+    
+    var edges3 = new THREE.EdgesGeometry( tablelegGeom2 );
+    var line3 = new THREE.LineSegments( edges3, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+    
+    tableleg2.add(line3);
+    tableTop.add(tableleg2); 
+
+
+    var tablelegGeom3 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
+    var tableleg3 =  new THREE.Mesh( tablelegGeom3,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+    tableleg3.position.set(-17.5,-20,-17.5);
+    
+    var edges4 = new THREE.EdgesGeometry( tablelegGeom3 );
+    var line4 = new THREE.LineSegments( edges4, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+    
+    tableleg3.add(line4);
+    tableTop.add(tableleg3);
+
+
+    var tablelegGeom4 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
+    var tableleg4 =  new THREE.Mesh( tablelegGeom4,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+    tableleg4.position.set(17.5,-20,-17.5);
+    
+    var edges5 = new THREE.EdgesGeometry( tablelegGeom4 );
+    var line5 = new THREE.LineSegments( edges5, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+    
+    tableleg4.add(line5);
+    tableTop.add(tableleg4);    
+}
+
+function addCircle()
+{
+    var circleGeometry = new THREE.CircleGeometry( 5, 32 );
+    var circleMaterial = new THREE.MeshBasicMaterial( { color: 0x8B4513 } );
+    var circle = new THREE.Mesh( circleGeometry, circleMaterial );
+    circle.position.set(0, -2, 0);
+    PIEaddElement(circle);
+}
+
 function loadExperimentElements()
 {
     PIEsetExperimentTitle("Buoyancy");
@@ -425,12 +498,14 @@ function loadExperimentElements()
     /* initialise Other Variables */
     initialiseOtherVariables();
 
+    addCircle();
     addCylinder();
+    addTable();
     addWoodenBox();
 
     document.getElementById("start").addEventListener("click", startanimation);
 
-    PIEsetAreaOfInterest(20, -7,  -20, 15);
+    PIEsetAreaOfInterest(15, -15, -15, 15);
 }
 
 /*----------------------  Function to start new animation cycle  ------------------*/
@@ -459,12 +534,12 @@ function resetExperiment()
 
 function updateExperimentElements(t, dt)
 {
-    if(group.position.y <= 3 && group.position.y >= -4.88)
+    if(group.position.y <= 3 && group.position.y >= -4.5)
     {
         ++tempvar;
         var current = group.position.y;
         group.position.set(0, current-0.08, 0);
-        if(group.position.y <= -4.88)
+        if(group.position.y <= -4.5)
         {
             PIEstopAnimation();
         }

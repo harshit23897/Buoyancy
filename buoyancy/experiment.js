@@ -65,19 +65,36 @@ function initialiseHelp()
     helpContent="";
     helpContent = helpContent + "<h2>Buoyancy Experiment</h2>";
     helpContent = helpContent + "<h3>About the experiment</h3>";
-    helpContent = helpContent + "<p>The experiment shows a block floating in water which sinks in water if enough weight is added to it.</p>";
-    helpContent = helpContent + "<h3>Animation Control</h3>";
-    helpContent = helpContent + "<p>The top line has a start/stop button which is initially set to start.</p>";
-    helpContent = helpContent + "<p>Click on start which will change the button to stop.</p>";
-    helpContent = helpContent + "<p>Now the animation has started.</p>";
-    helpContent = helpContent + "<p>Initially, there is a wooden block in the water.</p>";
-    helpContent = helpContent + "<p>The block can be changed by clicking on the Checkboxes in the control menu.</p>";
-    helpContent = helpContent + "<p>Now click on weights given in the control menu.</p>";
-    helpContent = helpContent + "<p>Once a block is selected and weight is put on it, then it cannot be changed.</p>";
-    helpContent = helpContent + "<p>As you keep on adding more and more weight, the block will sink more and more in water.</p>";
-    helpContent = helpContent + "<p>Once enough weight is added, the block will sink in water.</p>";
-    helpContent = helpContent + "<p>Click on reset button to start the expeiment again.</p>";
-    infoContent = infoContent + "<h2>Happy Experimenting</h2>";
+    helpContent = helpContent + "<p>The experiment shows block floating in water which sinks in water if enough weight is added to it.</p>";
+    helpContent = helpContent + "<h3>Animation control</h3>";
+    helpContent = helpContent + "<p>The top line has animation controls. There are two states of the experiment.</p>";
+    helpContent = helpContent + "<h3>The setup stage</h3>";
+    helpContent = helpContent + "<p>The initial state is setup stage. In this stage, you can see a control window at the right. You have access to five sliders.</p>";
+    helpContent = helpContent + "<p>You can control the following:</p>";
+    helpContent = helpContent + "<ul>";
+    helpContent = helpContent + "<li>X&nbsp;&nbsp;:&nbsp;Controls the X position of the ball.</li>";
+    helpContent = helpContent + "<li>Y&nbsp;&nbsp;:&nbsp;Controls the Y position of the ball.</li>";
+    helpContent = helpContent + "<li>VX&nbsp;:&nbsp;Controls the X velocity of the ball.</li>";
+    helpContent = helpContent + "<li>VY&nbsp;:&nbsp;Controls the Y velocity of the ball.</li>";
+    helpContent = helpContent + "<li>AY&nbsp;:&nbsp;Controls the Y acceleration of the ball.</li>";
+    helpContent = helpContent + "</ul>";
+    helpContent = helpContent + "<p>You also have an additional text input to control the coefficient of restitution of the bottom floor.</p>";
+    helpContent = helpContent + "<p>Once you setup the experiment, you can enter the animation stage by clicking the start button</p>";
+    helpContent = helpContent + "<h3>The animation stage</h3>";
+    helpContent = helpContent + "<p>In the animation stage, the ball will bounce around obeyng the laws of physics.</p>";
+    helpContent = helpContent + "<p>The right hand panel now shows the values of the four experiment variables during animation.</p>";
+    helpContent = helpContent + "<ul>";
+    helpContent = helpContent + "<li>X&nbsp;&nbsp;:&nbsp;Shows the X position of the ball.</li>";
+    helpContent = helpContent + "<li>Y&nbsp;&nbsp;:&nbsp;Shows the Y position of the ball.</li>";
+    helpContent = helpContent + "<li>VX&nbsp;:&nbsp;Shows the X velocity of the ball.</li>";
+    helpContent = helpContent + "<li>VY&nbsp;:&nbsp;Shows the Y velocity of the ball.</li>";
+    helpContent = helpContent + "</ul>";
+    helpContent = helpContent + "<p>In addition you will also see two sliders showing potential and kinetic energy.</p>";
+    helpContent = helpContent + "<p>You can pause and resume the animation by using the pause/play nutton on the top line</p>";
+    helpContent = helpContent + "<p>You can slow down and speed up the animaion by uing the speed control buttons</p>";
+    helpContent = helpContent + "<h3>The drag and drop</h3>";
+    helpContent = helpContent + "<p>You can also position the ball by dragging and dropping it. You can only do this in the setup stage. This has been prevented in the animation stage.</p>";
+    helpContent = helpContent + "<h2>Happy Experimenting</h2>";
     PIEupdateHelp(helpContent);
 }
 
@@ -85,17 +102,23 @@ var infoContent;
 function initialiseInfo()
 {
     infoContent =  "";
-    infoContent = infoContent + "<h2>Buoyancy Experiment concepts</h2>";
+    infoContent = infoContent + "<h2>Bouncing Ball experiment concepts</h2>";
     infoContent = infoContent + "<h3>About the experiment</h3>";
-    infoContent = infoContent + "<p>The experiment shows a block floating in water which sinks in water if enough weight is added to it.</p>";
-    infoContent = infoContent + "<h3>Buoyancy</h3>";
-    infoContent = infoContent + "<p>When an object is placed in water, buoyant force acts on it that opposes the weight of an immersed object.</p>";
-    infoContent = infoContent + "<p>The amount of buoyant force acting on an object is B = p*V*g.</p>";
-    infoContent = infoContent + "<p>where, p = density of fluid, V = volume of fluid displaced by the object, g = gravitational force.</p>";
-    infoContent = infoContent + "<p>Now, there is also another force acting on an object in downward direction which is gravitational force F = m*g.</p>";
-    infoContent = infoContent + "<p>where, m = mass of object, g = gravitational force.</p>";
-    infoContent = infoContent + "<p>Hence, the object will remain in equilibrium if buoyant force(B) equals gravitational force(F).</p>";
-    infoContent = infoContent + "<p>Hence, if we keep on adding more and more weight, the gravitational force will increase and after a point the object will sink.</p>";
+    infoContent = infoContent + "<p>The experiment shws a bouncing ball constrained by left, right, top and bottom walls.</p>";
+    infoContent = infoContent + "<h3>Collision</h3>";
+    infoContent = infoContent + "<p>When an object collides with a surface, the direction of velocity normal to the surface is reversed.</p>";
+    infoContent = infoContent + "<p>At the time of impact, the ball is deformed because of the force of the wall. This deformation can be easily observed with a sponge ball. If you drop a ball of dough on the floor, it does not bounce, it is only deformed.</p>";
+    infoContent = infoContent + "<p>The harder balls are also deformed. But because of the hard nature of the meterial, the hard ball tries to regain it's shape. This attempt to reain the shape reverses the velocity by pushing aainst the wall.</p>";
+    infoContent = infoContent + "<p>When the ball collides with the left or the right wall, the velocity in the X direction reverses while the velocity in the Y direction reamains the same.</p>";
+    infoContent = infoContent + "<p>When the ball collides with the top or the bottom wall, the velocity in the Y direction reverses while the velocity in the Y direction reamains the same.</p>";
+    infoContent = infoContent + "<h3>The coefficient of restitution</h3>";
+    infoContent = infoContent + "<p>When the velocity reverses direction, it is not necessary that it's magnitude remains the same.</p>";
+    infoContent = infoContent + "<p>The ball may not retain it's original shape and texture. The cricket ball loses it's shine.</p>";
+    infoContent = infoContent + "<p>Some of the energy is lost because of the deformation of the ball. The energy loss means that the kinetic energy of the ball will be reduced after impact.</p>";
+    infoContent = infoContent + "<p>The coefficient of restitution specifies how much of the velocity will be retained after impact.</p>";
+    infoContent = infoContent + "<p>The coefficient of restitution does not affect te velocity in the direction parallel to the impact.</p>";
+    infoContent = infoContent + "<p>When the ball collides with the left or the right wall, the magnitude of the velocity in the X direction will reduce as per the coefficient of restitution. The magnitude and sign in Y direction remains the same.</p>";
+    infoContent = infoContent + "<p>When the ball collides with the top or the bottom wall, the magnitude of the velocity in the Y direction will reduce as per the coefficient of restitution. The magnitude and sign in X direction remains the same.</p>";
     infoContent = infoContent + "<h2>Happy Experimenting</h2>";
     PIEupdateInfo(infoContent);
 }
@@ -410,8 +433,8 @@ function sink()
 
 function loadExperimentElements()
 {
-    PIEsetExperimentTitle("Buoyancy");
-    PIEsetDeveloperName("Harshit Jain");
+    PIEsetExperimentTitle("Experiment Name");
+    PIEsetDeveloperName("CJ");
 
     /* initialise help and info content */
     initialiseHelp();

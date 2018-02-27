@@ -3,5 +3,5 @@ This is a simple javascript application which shows how buoyancy works. This is 
 
 ## Getting Started
 1. Clone this repository.
-2. Go to folder buoyancy
+2. Go to folder Experiment.
 3. Click on index.html

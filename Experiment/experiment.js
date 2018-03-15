@@ -11,17 +11,23 @@ var count;
 var previousWoodenCube;
 var line2;
 var volume;
+var p;
 var massOfBlock;
 var group;
 var numberOfBlocksAdded;
 var mainCuboid;
+var stack = [];
+var heightStack = [];
 var geometry;
+var header;
+var blockType;
 var tempvar = 0;
 var count1 = 0;
 var material;
 var wireframe;
 var cylinder;
 var cylinder1;
+var cylinder1ScaleChange;
 var mainLine2;
 var currentYValue;
 var group1;
@@ -72,9 +78,10 @@ function initialiseHelp()
     helpContent = helpContent + "<p>Now the animation has started.</p>";
     helpContent = helpContent + "<p>Initially, there is a wooden block in the water.</p>";
     helpContent = helpContent + "<p>The block can be changed by clicking on the Checkboxes in the control menu.</p>";
-    helpContent = helpContent + "<p>Now click on weights given in the control menu.</p>";
+    helpContent = helpContent + "<p>Now click on weights given in the control menu. There are five types of weights which are distinguished by color.</p>";
     helpContent = helpContent + "<p>Once a block is selected and weight is put on it, then it cannot be changed.</p>";
     helpContent = helpContent + "<p>As you keep on adding more and more weight, the block will sink more and more in water.</p>";
+    helpContent = helpContent + "<p>If you want to remove weights then click on Remove Weight.</p>";
     helpContent = helpContent + "<p>Once enough weight is added, the block will sink in water.</p>";
     helpContent = helpContent + "<p>Click on reset button to start the expeiment again.</p>";
     infoContent = infoContent + "<h2>Happy Experimenting</h2>";
@@ -96,6 +103,7 @@ function initialiseInfo()
     infoContent = infoContent + "<p>where, m = mass of object, g = gravitational force.</p>";
     infoContent = infoContent + "<p>Hence, the object will remain in equilibrium if buoyant force(B) equals gravitational force(F).</p>";
     infoContent = infoContent + "<p>Hence, if we keep on adding more and more weight, the gravitational force will increase and after a point the object will sink.</p>";
+    infoContent = infoContent + "<p>On the opposite side, if we remove weight then the gravitational force will decrease and block will rise again.</p>";
     infoContent = infoContent + "<h2>Happy Experimenting</h2>";
     PIEupdateInfo(infoContent);
 }
@@ -123,6 +131,7 @@ function initialiseScene()
     PIEaddDisplayCommand("1000g", oneKiloGram);
 }
 
+/*----------------------  Function to resize rendering when window is resized  ------------------*/
 window.onresize = function(){
     console.log("Window size: "+window.innerWidth+"x"+window.innerHeight+"px");
     renderer.setSize(window.innerWidth,window.innerHeight);
@@ -137,45 +146,65 @@ function onehundredGram()
 {
     cubesAdded++;
     numberOfBlocks[0]++;
-    addBlock();
+    stack.push(1);
+    if(numberOfBlocksAdded == 0)
+    {
+        heightSinked1 = 0;
+        heightSinked = 0;
+    }
+    addBlock(1);
 }
 
 function twohundredGram()
 {
     cubesAdded++;
     numberOfBlocks[1]++;
-    addBlock();
+    stack.push(2);
+    if(numberOfBlocksAdded == 0)
+    {
+        heightSinked1 = 0;
+        heightSinked = 0;
+    }
+    addBlock(2);
 }
 
 function fourhundredGram()
 {
     cubesAdded++;
     numberOfBlocks[2]++;
-    addBlock();
+    stack.push(3);
+    if(numberOfBlocksAdded == 0)
+    {
+        heightSinked1 = 0;
+        heightSinked = 0;
+    }
+    addBlock(3);
 }
 
 function fivehundredGram()
 {
     cubesAdded++;
     numberOfBlocks[3]++;
-    addBlock();
+    stack.push(4);
+    if(numberOfBlocksAdded == 0)
+    {
+        heightSinked1 = 0;
+        heightSinked = 0;
+    }
+    addBlock(4);
 }
 
 function oneKiloGram()
 {
     cubesAdded++;
     numberOfBlocks[4]++;
-    addBlock();
-}
-
-/*----------------------  Function to check if the wooden block is submerged in water or not  ------------------*/
-
-function checkIfWoodenBlockInWater()
-{
-    if(group.position.y <= 3)
+    stack.push(5);
+    if(numberOfBlocksAdded == 0)
     {
-        animate();
+        heightSinked1 = 0;
+        heightSinked = 0;
     }
+    addBlock(5);
 }
 
 function animate()
@@ -185,12 +214,23 @@ function animate()
 }
 
 /*----------------------  Function to add weight  ------------------*/
-function addBlock()
+
+function addBlock(type)
 {
     if(group.position.y > 2)
     {
         numberOfBlocksAdded++;
-        cuboidMaterial = new THREE.MeshBasicMaterial({color: 0x8C6529, side: THREE.DoubleSide, shading: THREE.FlatShading});
+        if(type == 1)
+            cuboidMaterial = new THREE.MeshBasicMaterial({color: 0xDFC9BB, side: THREE.DoubleSide, shading: THREE.FlatShading});
+        else if(type == 2)
+            cuboidMaterial = new THREE.MeshBasicMaterial({color: 0xC0957B, side: THREE.DoubleSide, shading: THREE.FlatShading});
+        else if(type == 3)
+            cuboidMaterial = new THREE.MeshBasicMaterial({color: 0xB07B5A, side: THREE.DoubleSide, shading: THREE.FlatShading});
+        else if(type == 4)
+            cuboidMaterial = new THREE.MeshBasicMaterial({color: 0x714E3A, side: THREE.DoubleSide, shading: THREE.FlatShading});
+        else
+            cuboidMaterial = new THREE.MeshBasicMaterial({color: 0x483225, side: THREE.DoubleSide, shading: THREE.FlatShading});
+
         cuboid = new THREE.Mesh( new THREE.CubeGeometry( 2 , 1, 2),  cuboidMaterial);
 
         tempcurrentYValue = group.position.y;
@@ -223,6 +263,26 @@ function addBlock()
     }
 }
 
+/*----------------------  Function to remove weight  ------------------*/
+
+function removeWeight()
+{
+    if(numberOfBlocksAdded > 0 && group.position.y >= 2)
+    {
+        group.remove(group2);
+        group2.remove(group1);
+        group1.remove(group1.children[2*numberOfBlocksAdded-1]);
+        group1.remove(group1.children[2*numberOfBlocksAdded-2]);
+        numberOfBlocksAdded--;
+        cubesAdded--;
+        group2.add(group1);
+        group.add(group2);
+        blockType = stack.pop();
+        numberOfBlocks[blockType-1]--;
+        temp = -1*heightStack.pop();
+    }
+}
+
 /*----------------------  Functions for cube1, cube2 and cube3 which differ only in size but not volume.  ------------------*/
 
 function cube1()
@@ -233,7 +293,7 @@ function cube1()
         PIEchangeDisplayCheckbox("Cube2", false);
         PIEchangeDisplayCheckbox("Cube3", false);
 
-        var p = 3;
+        p = 3;
 
         if(primaryBlockType[1] == 1)
         {
@@ -263,6 +323,17 @@ function cube1()
         group.add(mainCuboid);
         group.add(mainLine2);
     }
+    else
+    {
+        $('input[type="checkbox"]').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            return false;
+            
+            alert('Break');
+        });
+    }
 }
 
 function cube2()
@@ -273,7 +344,7 @@ function cube2()
         PIEchangeDisplayCheckbox("Cube2", true);
         PIEchangeDisplayCheckbox("Cube3", false);
 
-        var p = 3;
+        p = 3;
 
         if(primaryBlockType[0] == 1)
         {
@@ -303,6 +374,17 @@ function cube2()
         group.add(mainCuboid);
         group.add(mainLine2);
     }
+    else
+    {
+        $('input[type="checkbox"]').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            return false;
+            
+            alert('Break');
+        });
+    }
 }
 
 function cube3()
@@ -312,8 +394,8 @@ function cube3()
         PIEchangeDisplayCheckbox("Cube1", false);
         PIEchangeDisplayCheckbox("Cube2", false);
         PIEchangeDisplayCheckbox("Cube3", true);
-
-        var p = 3;
+    
+        p = 3;
 
         if(primaryBlockType[0] == 1)
         {
@@ -343,6 +425,18 @@ function cube3()
         group.add(mainCuboid);
         group.add(mainLine2);
     }
+    else
+    {
+        console.log("HELLO from django");
+        $('input[type="checkbox"]').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            return false;
+            
+            alert('Break');
+        });
+    }
 }
 
 /*----------------------  Function to add cylinder  ------------------*/
@@ -365,14 +459,14 @@ function addCylinder()
     material.transparent = true;
     cylinder1 = new THREE.Mesh( geometry, material );
     cylinder1.position.set(0, -1, 0);   
-    cylinder.add( cylinder1 );
+    PIEaddElement(cylinder1)
 }
 
 /*----------------------  Function to add Wooden Box  ------------------*/
 
 function addWoodenBox()
 {
-    cuboidMaterial = new THREE.MeshBasicMaterial({color: 0x8C6529, side: THREE.DoubleSide, shading: THREE.FlatShading});
+    cuboidMaterial = new THREE.MeshBasicMaterial({color: 0x3A281E, side: THREE.DoubleSide, shading: THREE.FlatShading});
     mainCuboid = new THREE.Mesh( new THREE.CubeGeometry( 4 , 1, 4),  cuboidMaterial);
     mainCuboid.position.set(0, 0, 2);
     
@@ -382,11 +476,11 @@ function addWoodenBox()
 
     group.add(mainCuboid);
     group.add(mainLine2);
-    group.position.set(0, 4, 0);
+    group.position.set(0, 3.8, 0);
     PIEaddElement(group);
 
     primaryBlockType[0] = 1;
-    temp = 0.3;
+    // temp = 0.3;
     ++count1;
 
     sink();
@@ -405,17 +499,18 @@ function sink()
     massOfBlock += (numberOfBlocks[3]*500)/1000;
     massOfBlock += (numberOfBlocks[4]*1000)/1000;
 
-    heightSinked1 = heightSinked;
+    heightSinked1 = 3.89 - group.position.y;
 
     volumeOfWaterDisplaced = massOfBlock/(1000);
     
     heightSinked = volumeOfWaterDisplaced/(volume);
 
-    temp = heightSinked - heightSinked1;
+    temp = Math.abs(heightSinked - heightSinked1);
+    heightStack.push(temp);
     count = 0;
-
 }
 
+/*----------------------  Function to add table  ------------------*/
 function addTable(){
     var tableGeom = new THREE.CubeGeometry( 40, 0.5, 40, 4, 4, 1 );
     var tableTop =  new THREE.Mesh( tableGeom,new THREE.MeshBasicMaterial({color: 0x8B4513}));
@@ -472,15 +567,6 @@ function addTable(){
     tableTop.add(tableleg4);    
 }
 
-function addCircle()
-{
-    var circleGeometry = new THREE.CircleGeometry( 5, 32 );
-    var circleMaterial = new THREE.MeshBasicMaterial( { color: 0x8B4513 } );
-    var circle = new THREE.Mesh( circleGeometry, circleMaterial );
-    circle.position.set(0, -2, 0);
-    PIEaddElement(circle);
-}
-
 function loadExperimentElements()
 {
     PIEsetExperimentTitle("Buoyancy");
@@ -490,6 +576,9 @@ function loadExperimentElements()
     initialiseHelp();
     initialiseInfo();
 
+    PIEaddButton("Remove Weight");
+    document.getElementById("Remove Weight").addEventListener("click", removeWeight);
+
     /* initialise Scene */
     initialiseScene();
 
@@ -498,7 +587,6 @@ function loadExperimentElements()
     /* initialise Other Variables */
     initialiseOtherVariables();
 
-    addCircle();
     addCylinder();
     addTable();
     addWoodenBox();
@@ -516,6 +604,7 @@ function startanimation()
 
 function resetExperiment()
 {
+    console.log("In reset experiment")
     if(count1 >= 1)
     {
         PIEremoveElement(group);
@@ -525,6 +614,9 @@ function resetExperiment()
         group2 = new THREE.Group();
         group.remove(mainLine2);
         group.remove(mainCuboid);
+        temp = 0;
+        cylinder1.scale.y = 1;
+        cylinder1.position.y = -1;
         PIEchangeDisplayCheckbox("Cube1", true);
         PIEchangeDisplayCheckbox("Cube2", false);
         PIEchangeDisplayCheckbox("Cube3", false);
@@ -551,6 +643,19 @@ function updateExperimentElements(t, dt)
             ++count;
             temp -= 0.08;
             group.position.set(0, group.position.y - 0.08, 0);
+        }
+        else
+        {
+            group.position.set(0, group.position.y - temp, 0);
+            temp = 0;
+        }
+    }
+    else if(temp < 0 && group.position.y > 3)
+    {
+        if(temp <= -0.08)
+        {
+            temp += 0.08;
+            group.position.set(0, group.position.y + 0.08, 0);
         }
         else
         {

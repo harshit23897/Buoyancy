@@ -16,6 +16,8 @@ var massOfBlock;
 var group;
 var numberOfBlocksAdded;
 var mainCuboid;
+var sinking;
+var variable = 1;
 var stack = [];
 var heightStack = [];
 var geometry;
@@ -55,6 +57,7 @@ function initialiseVariables()
     heightSinked = 0;
     cubesAdded = 0;
     tempvar = 0;
+    sinking = 0.2;
     numberOfBlocks = [0, 0, 0, 0, 0];
     primaryBlockType = [1, 0, 0]
 }
@@ -76,6 +79,7 @@ function initialiseHelp()
     helpContent = helpContent + "<p>The top line has a start/stop button which is initially set to start.</p>";
     helpContent = helpContent + "<p>Click on start which will change the button to stop.</p>";
     helpContent = helpContent + "<p>Now the animation has started.</p>";
+    helpContent = helpContent + "<p>On the right side, you can see the cube dimensions and how much the main wooden block has sunk.</p>";
     helpContent = helpContent + "<p>Initially, there is a wooden block in the water.</p>";
     helpContent = helpContent + "<p>The block can be changed by clicking on the Checkboxes in the control menu.</p>";
     helpContent = helpContent + "<p>Now click on weights given in the control menu. There are five types of weights which are distinguished by color.</p>";
@@ -83,7 +87,7 @@ function initialiseHelp()
     helpContent = helpContent + "<p>As you keep on adding more and more weight, the block will sink more and more in water.</p>";
     helpContent = helpContent + "<p>If you want to remove weights then click on Remove Weight.</p>";
     helpContent = helpContent + "<p>Once enough weight is added, the block will sink in water.</p>";
-    helpContent = helpContent + "<p>Click on reset button to start the expeiment again.</p>";
+    helpContent = helpContent + "<p>Click on reset button to start the experiment again.</p>";
     infoContent = infoContent + "<h2>Happy Experimenting</h2>";
     PIEupdateHelp(helpContent);
 }
@@ -129,6 +133,9 @@ function initialiseScene()
     PIEaddDisplayCommand("400g", fourhundredGram);
     PIEaddDisplayCommand("500g", fivehundredGram);
     PIEaddDisplayCommand("1000g", oneKiloGram);
+
+    PIEaddDisplayText("Cube Dimension", "2x1x2");
+    PIEaddDisplayText("Sunk", sinking);
 }
 
 /*----------------------  Function to resize rendering when window is resized  ------------------*/
@@ -144,80 +151,98 @@ window.onresize = function(){
 
 function onehundredGram()
 {
-    cubesAdded++;
-    numberOfBlocks[0]++;
-    stack.push(1);
-    if(numberOfBlocksAdded == 0)
+    if(variable == 1)
     {
-        heightSinked1 = 0;
-        heightSinked = 0;
+        cubesAdded++;
+        numberOfBlocks[0]++;
+        stack.push(1);
+        if(numberOfBlocksAdded == 0)
+        {
+            heightSinked1 = 0;
+            heightSinked = 0;
+        }
+        addBlock(1);
     }
-    addBlock(1);
 }
 
 function twohundredGram()
 {
-    cubesAdded++;
-    numberOfBlocks[1]++;
-    stack.push(2);
-    if(numberOfBlocksAdded == 0)
+    if(variable == 1)
     {
-        heightSinked1 = 0;
-        heightSinked = 0;
+        cubesAdded++;
+        numberOfBlocks[1]++;
+        stack.push(2);
+        if(numberOfBlocksAdded == 0)
+        {
+            heightSinked1 = 0;
+            heightSinked = 0;
+        }
+        addBlock(2);
     }
-    addBlock(2);
 }
 
 function fourhundredGram()
 {
-    cubesAdded++;
-    numberOfBlocks[2]++;
-    stack.push(3);
-    if(numberOfBlocksAdded == 0)
+    if(variable == 1)
     {
-        heightSinked1 = 0;
-        heightSinked = 0;
-    }
-    addBlock(3);
+        cubesAdded++;
+        numberOfBlocks[2]++;
+        stack.push(3);
+        if(numberOfBlocksAdded == 0)
+        {
+            heightSinked1 = 0;
+            heightSinked = 0;
+        }
+        addBlock(3);
+    }   
 }
 
 function fivehundredGram()
 {
-    cubesAdded++;
-    numberOfBlocks[3]++;
-    stack.push(4);
-    if(numberOfBlocksAdded == 0)
+    if(variable == 1)
     {
-        heightSinked1 = 0;
-        heightSinked = 0;
+        cubesAdded++;
+        numberOfBlocks[3]++;
+        stack.push(4);
+        if(numberOfBlocksAdded == 0)
+        {
+            heightSinked1 = 0;
+            heightSinked = 0;
+        }
+        addBlock(4);
     }
-    addBlock(4);
 }
 
 function oneKiloGram()
 {
-    cubesAdded++;
-    numberOfBlocks[4]++;
-    stack.push(5);
-    if(numberOfBlocksAdded == 0)
+    if(variable == 1)
     {
-        heightSinked1 = 0;
-        heightSinked = 0;
+        cubesAdded++;
+        numberOfBlocks[4]++;
+        stack.push(5);
+        if(numberOfBlocksAdded == 0)
+        {
+            heightSinked1 = 0;
+            heightSinked = 0;
+        }
+        addBlock(5);
     }
-    addBlock(5);
 }
 
 function animate()
 {
-    PIErender();
-    PIEstartAnimation();
+    if(variable == 1)
+    {
+        PIErender();
+        PIEstartAnimation();
+    }
 }
 
 /*----------------------  Function to add weight  ------------------*/
 
 function addBlock(type)
 {
-    if(group.position.y > 2)
+    if(group.position.y > 2 && variable == 1)
     {
         numberOfBlocksAdded++;
         if(type == 1)
@@ -267,8 +292,9 @@ function addBlock(type)
 
 function removeWeight()
 {
-    if(numberOfBlocksAdded > 0 && group.position.y >= 2)
+    if(numberOfBlocksAdded > 0 && group.position.y >= 2 && variable == 1)
     {
+        console.log()
         group.remove(group2);
         group2.remove(group1);
         group1.remove(group1.children[2*numberOfBlocksAdded-1]);
@@ -287,155 +313,170 @@ function removeWeight()
 
 function cube1()
 {
-    if(numberOfBlocksAdded == 0)
+    if(variable == 1)
     {
-        PIEchangeDisplayCheckbox("Cube1", true);
-        PIEchangeDisplayCheckbox("Cube2", false);
-        PIEchangeDisplayCheckbox("Cube3", false);
-
-        p = 3;
-
-        if(primaryBlockType[1] == 1)
+        if(numberOfBlocksAdded == 0)
         {
-            p = 1;
-            previousWoodenCube = 1;
-            mainCuboid.position.y += 0.305;
-            mainLine2.position.y += 0.305;
+            PIEchangeDisplayCheckbox("Cube1", true);
+            PIEchangeDisplayCheckbox("Cube2", false);
+            PIEchangeDisplayCheckbox("Cube3", false);
+            PIEchangeDisplayText("Cube Dimension", "2x1x2");
+            PIEchangeDisplayText("Sunk", sinking);
+
+            p = 3;
+
+            if(primaryBlockType[1] == 1)
+            {
+                p = 1;
+                previousWoodenCube = 1;
+                mainCuboid.position.y += 0.305;
+                mainLine2.position.y += 0.305;
+            }
+            else if(primaryBlockType[2] == 1)
+            {
+                p = 2;
+                previousWoodenCube = 2;
+                mainCuboid.position.y += 0.49;
+                mainLine2.position.y += 0.49;
+            }   
+
+            group.remove(mainCuboid);
+            group.remove(mainLine2);
+
+            primaryBlockType[0] = 1;
+            primaryBlockType[1] = 0;
+            primaryBlockType[2] = 0;
+
+            mainCuboid.scale.set(1,1,1);
+            mainLine2.scale.set(1,1,1);
+            
+            group.add(mainCuboid);
+            group.add(mainLine2);
         }
-        else if(primaryBlockType[2] == 1)
+        else
         {
-            p = 2;
-            previousWoodenCube = 2;
-            mainCuboid.position.y += 0.49;
-            mainLine2.position.y += 0.49;
-        }   
-
-        group.remove(mainCuboid);
-        group.remove(mainLine2);
-
-        primaryBlockType[0] = 1;
-        primaryBlockType[1] = 0;
-        primaryBlockType[2] = 0;
-
-        mainCuboid.scale.set(1,1,1);
-        mainLine2.scale.set(1,1,1);
-        
-        group.add(mainCuboid);
-        group.add(mainLine2);
-    }
-    else
-    {
-        $('input[type="checkbox"]').on('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            return false;
-            
-            alert('Break');
-        });
+            $('input[type="checkbox"]').on('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                return false;
+                
+                alert('Break');
+            });
+        }
     }
 }
 
 function cube2()
 {
-    if(numberOfBlocksAdded == 0)
+    if(variable == 1)
     {
-        PIEchangeDisplayCheckbox("Cube1", false);
-        PIEchangeDisplayCheckbox("Cube2", true);
-        PIEchangeDisplayCheckbox("Cube3", false);
-
-        p = 3;
-
-        if(primaryBlockType[0] == 1)
+        if(numberOfBlocksAdded == 0)
         {
-            p = 1;
-            previousWoodenCube = 0;
-            mainCuboid.position.y -= 0.305;
-            mainLine2.position.y -= 0.305;
+            PIEchangeDisplayCheckbox("Cube1", false);
+            PIEchangeDisplayCheckbox("Cube2", true);
+            PIEchangeDisplayCheckbox("Cube3", false);
+            PIEchangeDisplayText("Cube Dimension", "1.2x0.695x1.2");
+            PIEchangeDisplayText("Sunk", sinking);
+
+            p = 3;
+
+            if(primaryBlockType[0] == 1)
+            {
+                p = 1;
+                previousWoodenCube = 0;
+                mainCuboid.position.y -= 0.305;
+                mainLine2.position.y -= 0.305;
+            }
+            else if(primaryBlockType[2] == 1)
+            {
+                p = 2;
+                previousWoodenCube = 2;
+                mainCuboid.position.y += 0.185;
+                mainLine2.position.y += 0.185;
+            }
+
+            group.remove(mainCuboid);
+            group.remove(mainLine2);
+
+            primaryBlockType[0] = 0;
+            primaryBlockType[1] = 1;
+            primaryBlockType[2] = 0;
+
+            mainCuboid.scale.set(1.2,0.695,1.2);
+            mainLine2.scale.set(1.2,0.695,1.2);
+
+            group.add(mainCuboid);
+            group.add(mainLine2);
         }
-        else if(primaryBlockType[2] == 1)
+        else
         {
-            p = 2;
-            previousWoodenCube = 2;
-            mainCuboid.position.y += 0.185;
-            mainLine2.position.y += 0.185;
+            $('input[type="checkbox"]').on('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                return false;
+                
+                alert('Break');
+            });
         }
-
-        group.remove(mainCuboid);
-        group.remove(mainLine2);
-
-        primaryBlockType[0] = 0;
-        primaryBlockType[1] = 1;
-        primaryBlockType[2] = 0;
-
-        mainCuboid.scale.set(1.2,0.695,1.2);
-        mainLine2.scale.set(1.2,0.695,1.2);
-
-        group.add(mainCuboid);
-        group.add(mainLine2);
-    }
-    else
-    {
-        $('input[type="checkbox"]').on('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            return false;
-            
-            alert('Break');
-        });
     }
 }
 
 function cube3()
 {
-    if(numberOfBlocksAdded == 0)
+    if(variable == 1)
     {
-        PIEchangeDisplayCheckbox("Cube1", false);
-        PIEchangeDisplayCheckbox("Cube2", false);
-        PIEchangeDisplayCheckbox("Cube3", true);
-    
-        p = 3;
-
-        if(primaryBlockType[0] == 1)
+        if(numberOfBlocksAdded == 0)
         {
-            p = 1;
-            previousWoodenCube = 0;
-            mainCuboid.position.y -= 0.49;
-            mainLine2.position.y -= 0.49;
+            PIEchangeDisplayCheckbox("Cube1", false);
+            PIEchangeDisplayCheckbox("Cube2", false);
+            PIEchangeDisplayCheckbox("Cube3", true);
+            PIEchangeDisplayText("Cube Dimension", "1.4x0.510x1.4");
+            PIEchangeDisplayText("Sunk", sinking);
+        
+            p = 3;
+
+            if(primaryBlockType[0] == 1)
+            {
+                p = 1;
+                previousWoodenCube = 0;
+                mainCuboid.position.y -= 0.49;
+                mainLine2.position.y -= 0.49;
+            }
+            else if(primaryBlockType[1] == 1)
+            {
+                p = 2;
+                previousWoodenCube = 1;
+                mainCuboid.position.y -= 0.185;
+                mainLine2.position.y -= 0.185;
+            }
+
+            group.remove(mainCuboid);
+            group.remove(mainLine2);
+
+            primaryBlockType[0] = 0;
+            primaryBlockType[1] = 0;
+            primaryBlockType[2] = 1;
+
+            mainCuboid.scale.set(1.4,0.510,1.4);
+            mainLine2.scale.set(1.4,0.510,1.4);
+
+            group.add(mainCuboid);
+            group.add(mainLine2);
         }
-        else if(primaryBlockType[1] == 1)
+        else
         {
-            p = 2;
-            previousWoodenCube = 1;
-            mainCuboid.position.y -= 0.185;
-            mainLine2.position.y -= 0.185;
+            console.log("HELLO from django");
+            $('input[type="checkbox"]').on('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                return false;
+                
+                alert('Break');
+            });
         }
-
-        group.remove(mainCuboid);
-        group.remove(mainLine2);
-
-        primaryBlockType[0] = 0;
-        primaryBlockType[1] = 0;
-        primaryBlockType[2] = 1;
-
-        mainCuboid.scale.set(1.4,0.510,1.4);
-        mainLine2.scale.set(1.4,0.510,1.4);
-
-        group.add(mainCuboid);
-        group.add(mainLine2);
-    }
-    else
-    {
-        console.log("HELLO from django");
-        $('input[type="checkbox"]').on('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            return false;
-            
-            alert('Break');
-        });
     }
 }
 
@@ -443,128 +484,154 @@ function cube3()
 
 function addCylinder()
 {
-    geometry = new THREE.CylinderBufferGeometry( 5, 5, 10, 32, 1, true );
-    material = new THREE.MeshBasicMaterial( {color: 0x777777} );
-    wireframe = new THREE.WireframeGeometry( geometry );
-    cylinder = new THREE.LineSegments( wireframe, material );
-    cylinder.material.depthTest = false;
-    cylinder.material.opacity = 0.8;
-    cylinder.material.transparent = false;
+    if(variable == 1)
+    {
+        geometry = new THREE.CylinderBufferGeometry( 5, 5, 10, 32, 1, true );
+        material = new THREE.MeshBasicMaterial( {color: 0x777777} );
+        wireframe = new THREE.WireframeGeometry( geometry );
+        cylinder = new THREE.LineSegments( wireframe, material );
+        cylinder.material.depthTest = false;
+        cylinder.material.opacity = 0.8;
+        cylinder.material.transparent = false;
 
-    PIEaddElement(cylinder); 
+        PIEaddElement(cylinder); 
 
-    geometry = new THREE.CylinderBufferGeometry( 5, 5, 8, 100 );
-    material = new THREE.MeshBasicMaterial( {color: 0x256d7b} );
-    material.opacity = 0.5;
-    material.transparent = true;
-    cylinder1 = new THREE.Mesh( geometry, material );
-    cylinder1.position.set(0, -1, 0);   
-    PIEaddElement(cylinder1)
+        geometry = new THREE.CylinderBufferGeometry( 5, 5, 8, 100 );
+        material = new THREE.MeshBasicMaterial( {color: 0x256d7b} );
+        material.opacity = 0.5;
+        material.transparent = true;
+        cylinder1 = new THREE.Mesh( geometry, material );
+        cylinder1.position.set(0, -1, 0);   
+        PIEaddElement(cylinder1)
+    }
 }
 
 /*----------------------  Function to add Wooden Box  ------------------*/
 
 function addWoodenBox()
 {
-    cuboidMaterial = new THREE.MeshBasicMaterial({color: 0x3A281E, side: THREE.DoubleSide, shading: THREE.FlatShading});
-    mainCuboid = new THREE.Mesh( new THREE.CubeGeometry( 4 , 1, 4),  cuboidMaterial);
-    mainCuboid.position.set(0, 0, 2);
+    if(variable == 1)
+    {
+        cuboidMaterial = new THREE.MeshBasicMaterial({color: 0x3A281E, side: THREE.DoubleSide, shading: THREE.FlatShading});
+        mainCuboid = new THREE.Mesh( new THREE.CubeGeometry( 4 , 1, 4),  cuboidMaterial);
+        mainCuboid.position.set(0, 0, 2);
+        
+        edges = new THREE.EdgesGeometry( new THREE.BoxBufferGeometry( 4, 1, 4 ) );
+        mainLine2 = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+        mainLine2.position.set(0, 0, 2);
+
+        group.add(mainCuboid);
+        group.add(mainLine2);
+        group.position.set(0, 3.8, 0);
+        PIEaddElement(group);
+
+        primaryBlockType[0] = 1;
     
-    edges = new THREE.EdgesGeometry( new THREE.BoxBufferGeometry( 4, 1, 4 ) );
-    mainLine2 = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x000 } ) );
-    mainLine2.position.set(0, 0, 2);
-
-    group.add(mainCuboid);
-    group.add(mainLine2);
-    group.position.set(0, 3.8, 0);
-    PIEaddElement(group);
-
-    primaryBlockType[0] = 1;
-    // temp = 0.3;
-    ++count1;
-
-    sink();
+        ++count1;
+    }
 }
 
 /*----------------------  Function to calculate how much the block with or without weight has sunk in the water and update the weight  ------------------*/
 
 function sink()
 {
-    volume = 0.0016;
-    massOfBlock = (densityOfWood*volume);
+    if(variable == 1)
+    {
+        volume = 0.0016;
+        massOfBlock = (densityOfWood*volume);
 
-    massOfBlock += (numberOfBlocks[0]*100)/1000;
-    massOfBlock += (numberOfBlocks[1]*200)/1000;
-    massOfBlock += (numberOfBlocks[2]*400)/1000;
-    massOfBlock += (numberOfBlocks[3]*500)/1000;
-    massOfBlock += (numberOfBlocks[4]*1000)/1000;
+        massOfBlock += (numberOfBlocks[0]*100)/1000;
+        massOfBlock += (numberOfBlocks[1]*200)/1000;
+        massOfBlock += (numberOfBlocks[2]*400)/1000;
+        massOfBlock += (numberOfBlocks[3]*500)/1000;
+        massOfBlock += (numberOfBlocks[4]*1000)/1000;
 
-    heightSinked1 = 3.89 - group.position.y;
+        heightSinked1 = 3.89 - group.position.y;
 
-    volumeOfWaterDisplaced = massOfBlock/(1000);
-    
-    heightSinked = volumeOfWaterDisplaced/(volume);
+        volumeOfWaterDisplaced = massOfBlock/(1000);
+        
+        heightSinked = volumeOfWaterDisplaced/(volume);
 
-    temp = Math.abs(heightSinked - heightSinked1);
-    heightStack.push(temp);
-    count = 0;
+        temp = Math.abs(heightSinked - heightSinked1);
+        heightStack.push(temp);
+        count = 0;
+    }
 }
 
 /*----------------------  Function to add table  ------------------*/
+
 function addTable(){
-    var tableGeom = new THREE.CubeGeometry( 40, 0.5, 40, 4, 4, 1 );
-    var tableTop =  new THREE.Mesh( tableGeom,new THREE.MeshBasicMaterial({color: 0x8B4513}));
-    tableTop.position.z += 116;
-    tableTop.position.y -= 16;
-    PIEaddElement(tableTop);
+    if(variable == 1) 
+    {
+        var tableGeom = new THREE.CubeGeometry( 40, 0.5, 40, 4, 4, 1 );
+        var tableTop =  new THREE.Mesh( tableGeom,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+        tableTop.position.z += 116;
+        tableTop.position.y -= 16;
+        PIEaddElement(tableTop);
 
-    var edges = new THREE.EdgesGeometry( tableGeom );
-    var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x000 } ) );
-    
-    tableTop.add(line);
+        var edges = new THREE.EdgesGeometry( tableGeom );
+        var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+        
+        tableTop.add(line);
 
-    var tablelegGeom = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
-    var tableleg =  new THREE.Mesh( tablelegGeom,new THREE.MeshBasicMaterial({color: 0x8B4513}));
-    tableleg.position.set(-17.5,-20,17.5);
-    
-    var edges2 = new THREE.EdgesGeometry( tablelegGeom );
-    var line2 = new THREE.LineSegments( edges2, new THREE.LineBasicMaterial( { color: 0x000 } ) );
-    
-    tableleg.add(line2);
-    tableTop.add(tableleg);  
+        var tablelegGeom = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
+        var tableleg =  new THREE.Mesh( tablelegGeom,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+        tableleg.position.set(-17.5,-20,17.5);
+        
+        var edges2 = new THREE.EdgesGeometry( tablelegGeom );
+        var line2 = new THREE.LineSegments( edges2, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+        
+        tableleg.add(line2);
+        tableTop.add(tableleg);  
 
-   
-    var tablelegGeom2 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
-    var tableleg2 =  new THREE.Mesh( tablelegGeom2,new THREE.MeshBasicMaterial({color: 0x8B4513}));
-    tableleg2.position.set(17.5,-20,17.5);
-    
-    var edges3 = new THREE.EdgesGeometry( tablelegGeom2 );
-    var line3 = new THREE.LineSegments( edges3, new THREE.LineBasicMaterial( { color: 0x000 } ) );
-    
-    tableleg2.add(line3);
-    tableTop.add(tableleg2); 
-
-
-    var tablelegGeom3 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
-    var tableleg3 =  new THREE.Mesh( tablelegGeom3,new THREE.MeshBasicMaterial({color: 0x8B4513}));
-    tableleg3.position.set(-17.5,-20,-17.5);
-    
-    var edges4 = new THREE.EdgesGeometry( tablelegGeom3 );
-    var line4 = new THREE.LineSegments( edges4, new THREE.LineBasicMaterial( { color: 0x000 } ) );
-    
-    tableleg3.add(line4);
-    tableTop.add(tableleg3);
+       
+        var tablelegGeom2 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
+        var tableleg2 =  new THREE.Mesh( tablelegGeom2,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+        tableleg2.position.set(17.5,-20,17.5);
+        
+        var edges3 = new THREE.EdgesGeometry( tablelegGeom2 );
+        var line3 = new THREE.LineSegments( edges3, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+        
+        tableleg2.add(line3);
+        tableTop.add(tableleg2); 
 
 
-    var tablelegGeom4 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
-    var tableleg4 =  new THREE.Mesh( tablelegGeom4,new THREE.MeshBasicMaterial({color: 0x8B4513}));
-    tableleg4.position.set(17.5,-20,-17.5);
-    
-    var edges5 = new THREE.EdgesGeometry( tablelegGeom4 );
-    var line5 = new THREE.LineSegments( edges5, new THREE.LineBasicMaterial( { color: 0x000 } ) );
-    
-    tableleg4.add(line5);
-    tableTop.add(tableleg4);    
+        var tablelegGeom3 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
+        var tableleg3 =  new THREE.Mesh( tablelegGeom3,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+        tableleg3.position.set(-17.5,-20,-17.5);
+        
+        var edges4 = new THREE.EdgesGeometry( tablelegGeom3 );
+        var line4 = new THREE.LineSegments( edges4, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+        
+        tableleg3.add(line4);
+        tableTop.add(tableleg3);
+
+
+        var tablelegGeom4 = new THREE.CubeGeometry( 0.5, 40, 0.5, 4, 4, 1 );
+        var tableleg4 =  new THREE.Mesh( tablelegGeom4,new THREE.MeshBasicMaterial({color: 0x8B4513}));
+        tableleg4.position.set(17.5,-20,-17.5);
+        
+        var edges5 = new THREE.EdgesGeometry( tablelegGeom4 );
+        var line5 = new THREE.LineSegments( edges5, new THREE.LineBasicMaterial( { color: 0x000 } ) );
+        
+        tableleg4.add(line5);
+        tableTop.add(tableleg4);  
+    }  
+}
+
+/*----------------------  Function to set variable to detect if start is pressed  ------------------*/
+
+function setVariable()
+{
+    startanimation;
+    variable = 1;
+}
+
+/*----------------------  Function to set variable to detect if stop is pressed  ------------------*/
+
+function resetVariable()
+{
+    variable = 0;
 }
 
 function loadExperimentElements()
@@ -579,10 +646,10 @@ function loadExperimentElements()
     PIEaddButton("Remove Weight");
     document.getElementById("Remove Weight").addEventListener("click", removeWeight);
 
+    initialiseVariables();
+
     /* initialise Scene */
     initialiseScene();
-
-    initialiseVariables();
 
     /* initialise Other Variables */
     initialiseOtherVariables();
@@ -591,10 +658,13 @@ function loadExperimentElements()
     addTable();
     addWoodenBox();
 
-    document.getElementById("start").addEventListener("click", startanimation);
+    document.getElementById("start").addEventListener('click', setVariable);
+
+    document.getElementById("stop").addEventListener('click', resetVariable);
 
     PIEsetAreaOfInterest(15, -15, -15, 15);
 }
+
 
 /*----------------------  Function to start new animation cycle  ------------------*/
 function startanimation()
@@ -604,7 +674,6 @@ function startanimation()
 
 function resetExperiment()
 {
-    console.log("In reset experiment")
     if(count1 >= 1)
     {
         PIEremoveElement(group);
@@ -615,12 +684,15 @@ function resetExperiment()
         group.remove(mainLine2);
         group.remove(mainCuboid);
         temp = 0;
+        variable = 1;
         cylinder1.scale.y = 1;
         cylinder1.position.y = -1;
         PIEchangeDisplayCheckbox("Cube1", true);
         PIEchangeDisplayCheckbox("Cube2", false);
         PIEchangeDisplayCheckbox("Cube3", false);
     }
+    sinking = 0.2;
+    PIEchangeDisplayText("Sunk", sinking);
     addWoodenBox();
 }
 
@@ -631,10 +703,8 @@ function updateExperimentElements(t, dt)
         ++tempvar;
         var current = group.position.y;
         group.position.set(0, current-0.08, 0);
-        if(group.position.y <= -4.5)
-        {
-            PIEstopAnimation();
-        }
+        sinking += 0.09;
+        PIEchangeDisplayText("Sunk", sinking);
     }
     else if(temp > 0 && group.position.y > 3)
     {
@@ -643,10 +713,18 @@ function updateExperimentElements(t, dt)
             ++count;
             temp -= 0.08;
             group.position.set(0, group.position.y - 0.08, 0);
+            sinking += 0.09;
+            PIEchangeDisplayText("Sunk", sinking);
+            cylinder1.scale.y += 0.005;
+            cylinder1.position.y += 2*0.01;
         }
         else
         {
             group.position.set(0, group.position.y - temp, 0);
+            cylinder1.scale.y += 0.005;
+            cylinder1.position.y += 2*0.01;
+            sinking += 0.09;
+            PIEchangeDisplayText("Sunk", sinking);
             temp = 0;
         }
     }
@@ -656,11 +734,19 @@ function updateExperimentElements(t, dt)
         {
             temp += 0.08;
             group.position.set(0, group.position.y + 0.08, 0);
+            sinking -= 0.09;
+            PIEchangeDisplayText("Sunk", sinking);
+            cylinder1.scale.y -= 0.005;
+            cylinder1.position.y -= 2*0.01;
         }
         else
         {
             group.position.set(0, group.position.y - temp, 0);
             temp = 0;
+            sinking -= 0.09;
+            PIEchangeDisplayText("Sunk", sinking);
+            cylinder1.scale.y -= 0.005;
+            cylinder1.position.y -= 2*0.01;
         }
     }
 }

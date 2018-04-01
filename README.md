@@ -1,5 +1,5 @@
 # Buoyancy
-This is a simple javascript application which shows how buoyancy works. This is created with three.js javascript library with PIE library.
+This is a javascript application which shows how buoyancy works. This is built using PIE Library on top of three.js library.
 
 ## Getting Started
 1. Clone this repository.

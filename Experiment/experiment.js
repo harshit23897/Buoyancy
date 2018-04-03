@@ -88,7 +88,7 @@ function initialiseHelp()
     helpContent = helpContent + "<p>If you want to remove weights then click on Remove Weight.</p>";
     helpContent = helpContent + "<p>Once enough weight is added, the block will sink in water.</p>";
     helpContent = helpContent + "<p>Click on reset button to start the experiment again.</p>";
-    infoContent = infoContent + "<h2>Happy Experimenting</h2>";
+    helpContent = helpContent + "<h2>Happy Experimenting</h2>";
     PIEupdateHelp(helpContent);
 }
 
@@ -261,21 +261,21 @@ function addBlock(type)
         tempcurrentYValue = group.position.y;
 
         if(primaryBlockType[0] == 1)
-            cuboid.position.set(0, cubesAdded , 2);
+            cuboid.position.set(0, cubesAdded + 0.02*cubesAdded, 2);
         else if(primaryBlockType[1] == 1)
-            cuboid.position.set(0, cubesAdded - 2*0.23, 2);
+            cuboid.position.set(0, cubesAdded - 2*0.23 + 0.02*cubesAdded, 2);
         else
-            cuboid.position.set(0, cubesAdded - 2*0.35, 2);
+            cuboid.position.set(0, cubesAdded - 2*0.35 + 0.02*cubesAdded, 2);
         
         edges = new THREE.EdgesGeometry( new THREE.BoxBufferGeometry( 2, 1, 2 ) );
         line2 = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x000 } ) );
 
         if(primaryBlockType[0] == 1)
-            line2.position.set(0, cubesAdded, 2);
+            line2.position.set(0, cubesAdded + 0.02*cubesAdded, 2);
         else if(primaryBlockType[1] == 1)
-            line2.position.set(0, cubesAdded - 2*0.23, 2);
+            line2.position.set(0, cubesAdded - 2*0.23 + 0.02*cubesAdded, 2);
         else
-            line2.position.set(0, cubesAdded - 2*0.35, 2);
+            line2.position.set(0, cubesAdded - 2*0.35 + 0.02*cubesAdded, 2);
 
         group.remove(group2);
         group1.add(cuboid);
